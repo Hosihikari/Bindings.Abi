@@ -19,6 +19,7 @@ The managed structs and the C++ structs are checked independently only by size/v
 | `HosihikariStringView` | `StringView` |
 | `HosihikariArrayView` | `ArrayView` |
 | `HosihikariSharedHandle` | `SharedHandleData` |
+| `HosihikariMapEntry` | `MapEntry` |
 
 The table itself stays surface-specific: each Interop assembly generates its own `NativeMethods.Table` and passes `sizeof(Table)` to `ShimLibrary.Load`.
 

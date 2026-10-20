@@ -11,7 +11,7 @@
 
   <PropertyGroup>
     <PackageId>Hosihikari.Bindings.Abi</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Hosihikari</Authors>
     <Description>Shared C ABI value types and shim loader for Hosihikari binding surfaces.</Description>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>

@@ -19,6 +19,7 @@ Hosihikari 绑定的共享 ABI 层：各 BindingShim 共用的值类型，以及
 | `HosihikariStringView` | `StringView` |
 | `HosihikariArrayView` | `ArrayView` |
 | `HosihikariSharedHandle` | `SharedHandleData` |
+| `HosihikariMapEntry` | `MapEntry` |
 
 函数表本身仍按 surface 生成：每个 Interop 程序集拥有自己的 `NativeMethods.Table`，并把 `sizeof(Table)` 传给 `ShimLibrary.Load`。
 
