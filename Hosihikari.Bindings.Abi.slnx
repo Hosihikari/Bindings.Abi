@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Hosihikari.Bindings.Abi/Hosihikari.Bindings.Abi.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,25 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build
+        run: dotnet build Hosihikari.Bindings.Abi.slnx -c Release
+
+      - name: Pack
+        run: dotnet pack src/Hosihikari.Bindings.Abi/Hosihikari.Bindings.Abi.csproj -c Release --no-build -o artifacts/package
+
+      - name: Check native header
+        run: test -f native/hosihikari_abi.h

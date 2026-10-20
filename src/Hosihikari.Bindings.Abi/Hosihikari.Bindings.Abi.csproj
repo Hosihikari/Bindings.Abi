@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>Hosihikari.Bindings.Abi</RootNamespace>
+    <AssemblyName>Hosihikari.Bindings.Abi</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Hosihikari.Bindings.Abi</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Hosihikari</Authors>
+    <Description>Shared C ABI value types and shim loader for Hosihikari binding surfaces.</Description>
+    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Hosihikari/Bindings.Abi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>minecraft;bedrock;bindings;interop;hosihikari</PackageTags>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../native/hosihikari_abi.h" Pack="true" PackagePath="native/hosihikari_abi.h" Link="native/hosihikari_abi.h" />
+    <None Include="../../README.md" Pack="true" PackagePath="README.md" Link="README.md" />
+  </ItemGroup>
+
+</Project>
