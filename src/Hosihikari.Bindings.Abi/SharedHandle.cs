@@ -27,6 +27,14 @@ public sealed unsafe class SharedHandle : IDisposable
 
     public bool IsDisposed => _holder == 0;
 
+    /// <summary>Returns the raw handle shape so the shim can borrow the shared reference.</summary>
+    public SharedHandleData ToNative() => new()
+    {
+        Holder = (void*)_holder,
+        Target = (void*)Target,
+        Release = _release,
+    };
+
     public void Dispose()
     {
         if (_holder != 0)

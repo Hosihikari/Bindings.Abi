@@ -6,7 +6,7 @@ The shared ABI layer for the Hosihikari bindings: value types used by every Bind
 
 - `Hosihikari.Bindings.Abi.StringView` — borrowed UTF-8 buffer.
 - `Hosihikari.Bindings.Abi.ArrayView` — borrowed element array.
-- `Hosihikari.Bindings.Abi.SharedHandleData` / `SharedHandle` — `std::shared_ptr` projection and its releasable handle.
+- `Hosihikari.Bindings.Abi.SharedHandleData` / `SharedHandle` — `std::shared_ptr` projection and its releasable handle. `ToNative()` returns the raw shape so generated shims can pass the shared reference back as a `shared_ptr` or `weak_ptr` argument.
 - `Hosihikari.Bindings.Abi.ShimLibrary` — loads a shim, checks the table version and size, keeps the native library alive, and exposes `GetLastError()` and `GetExport()`.
 - `native/hosihikari_abi.h` — the matching C++ layout, export macro, and thread-local error boundary. It is also shipped inside the NuGet package.
 
