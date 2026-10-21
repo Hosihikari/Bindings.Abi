@@ -6,7 +6,7 @@ Hosihikari 绑定的共享 ABI 层：各 BindingShim 共用的值类型，以及
 
 - `Hosihikari.Bindings.Abi.StringView` — 借用的 UTF-8 缓冲区。
 - `Hosihikari.Bindings.Abi.ArrayView` — 借用的元素数组。
-- `Hosihikari.Bindings.Abi.SharedHandleData` / `SharedHandle` — `std::shared_ptr` 投影及可释放句柄。`ToNative()` 返回原始布局，供生成的 shim 把共享引用作为 `shared_ptr` 或 `weak_ptr` 参数传回。
+- `Hosihikari.Bindings.Abi.SharedHandleData` / `SharedHandle` — `std::shared_ptr` 投影及可释放句柄。`ToNative()` 返回原始布局，供生成的 shim 把共享引用作为 `shared_ptr` 或 `weak_ptr` 参数传回。已释放的句柄会回收到线程局部对象池，因此句柄在 `Dispose` 之后不得再次使用。
 - `Hosihikari.Bindings.Abi.ShimLibrary` — 加载 shim、校验表版本与大小、保持原生库句柄，并暴露 `GetLastError()` 与 `GetExport()`。
 - `native/hosihikari_abi.h` — 对应的 C++ 布局、导出宏与线程局部错误边界，同时随 NuGet 包发布。
 

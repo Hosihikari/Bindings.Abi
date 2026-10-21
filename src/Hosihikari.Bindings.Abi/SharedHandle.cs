@@ -3,27 +3,44 @@ namespace Hosihikari.Bindings.Abi;
 /// <summary>
 /// Keeps one shared reference alive. <see cref="Target"/> is a borrowed address;
 /// disposing this handle returns the reference to the native owner set.
+/// Disposed instances are recycled, so a handle must not be used after <see cref="Dispose"/>.
 /// </summary>
 public sealed unsafe class SharedHandle : IDisposable
 {
-    private nint _holder;
-    private delegate* unmanaged[Cdecl]<void*, void> _release;
+    private const int MaxPooledPerThread = 64;
 
-    private SharedHandle(nint holder, nint target, delegate* unmanaged[Cdecl]<void*, void> release)
+    [ThreadStatic]
+    private static SharedHandle? tPool;
+
+    [ThreadStatic]
+    private static int tPoolCount;
+
+    private nint _holder;
+    private nint _target;
+    private delegate* unmanaged[Cdecl]<void*, void> _release;
+    private SharedHandle? _next;
+
+    private SharedHandle()
     {
-        _holder = holder;
-        _release = release;
-        Target = target;
     }
 
-    public static SharedHandle? FromNative(SharedHandleData data) =>
-        data.Holder is null
-            ? null
-            : new SharedHandle((nint)data.Holder, (nint)data.Target, data.Release);
+    public static SharedHandle? FromNative(SharedHandleData data)
+    {
+        if (data.Holder is null)
+        {
+            return null;
+        }
 
-    public nint Target { get; }
+        var handle = Rent();
+        handle._holder = (nint)data.Holder;
+        handle._target = (nint)data.Target;
+        handle._release = data.Release;
+        return handle;
+    }
 
-    public nint Handle => Target;
+    public nint Target => _target;
+
+    public nint Handle => _target;
 
     public bool IsDisposed => _holder == 0;
 
@@ -31,7 +48,7 @@ public sealed unsafe class SharedHandle : IDisposable
     public SharedHandleData ToNative() => new()
     {
         Holder = (void*)_holder,
-        Target = (void*)Target,
+        Target = (void*)_target,
         Release = _release,
     };
 
@@ -39,8 +56,39 @@ public sealed unsafe class SharedHandle : IDisposable
     {
         if (_holder != 0)
         {
-            _release((void*)_holder);
+            var holder = _holder;
+            var release = _release;
             _holder = 0;
+            _target = 0;
+            _release = null;
+            release((void*)holder);
+            ReturnToPool();
         }
+    }
+
+    private static SharedHandle Rent()
+    {
+        var pooled = tPool;
+        if (pooled is null)
+        {
+            return new SharedHandle();
+        }
+
+        tPool = pooled._next;
+        pooled._next = null;
+        tPoolCount--;
+        return pooled;
+    }
+
+    private void ReturnToPool()
+    {
+        if (tPoolCount >= MaxPooledPerThread)
+        {
+            return;
+        }
+
+        _next = tPool;
+        tPool = this;
+        tPoolCount++;
     }
 }
